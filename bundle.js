@@ -9,12 +9,12 @@
     "notesModel.js"(exports, module) {
       var NotesModel2 = class {
         constructor() {
-          this.notes = [];
+          this.notes = ["cleaning"];
         }
         getNotes() {
           return this.notes;
         }
-        addNote(note) {
+        addNotes(note) {
           this.notes.push(note);
         }
         reset() {
@@ -25,9 +25,36 @@
     }
   });
 
+  // notesView.js
+  var require_notesView = __commonJS({
+    "notesView.js"(exports, module) {
+      var NotesView2 = class {
+        constructor(model2) {
+          this.model = model2;
+          this.mainContainerEl = document.querySelector("#main-containter");
+        }
+        displayNotes() {
+          const notes = this.model.getNotes();
+          notes.forEach((note) => {
+            const noteEl = document.createElement("div");
+            noteEl.innerText = note;
+            noteEl.className = "note";
+            this.mainContainerEl.append(noteEl);
+          });
+          console.log(notes);
+        }
+      };
+      module.exports = NotesView2;
+    }
+  });
+
   // index.js
   var NotesModel = require_notesModel();
-  var notesModel = new NotesModel();
-  console.log(notesModel.getNotes());
+  var NotesView = require_notesView();
+  var model = new NotesModel();
+  model.addNotes("This is an example note");
+  model.addNotes("This is another note see!");
+  var notesView = new NotesView(model);
+  notesView.displayNotes();
   console.log("The notes app is running");
 })();

@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "name": "http://file:///Users/sarasabbagh/Desktop/frontend-webapp-notes-app/index.html",
+            "request": "launch",
+            "url": "http://file:///Users/sarasabbagh/Desktop/frontend-webapp-notes-app/index.html"
+        }
+    ]
+}
