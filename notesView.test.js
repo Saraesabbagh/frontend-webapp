@@ -11,16 +11,25 @@ describe('notesView', () => {
     beforeEach(() => { 
         document.body.innerHTML = fs.readFileSync('./index.html');
     })
-    
-
-    it('displays the notes on the html in a div', () => {
+    it('adds a new note', () => {
+        document.body.innerHTML = fs.readFileSync('./index.html');
+      
         const model = new NotesModel();
-        const notesView = new NotesView(model);
-        // notesView.addNotes('A first note');
-        // notesView.addNotes('A second note');
-        notesView.displayNotes();
+        const view = new NotesView(model);
+      
+        // 1. Fill the input
+        const input = document.querySelector('#note-input');
+        input.value = 'My new amazing test note';
+      
+        // 2. Click the button
+        const button = document.querySelector('#add-note-button');
+        button.click();
+      
+        // 3. The note should be on the page
+        expect(document.querySelectorAll('div.note').length).toEqual(1);
+        expect(document.querySelectorAll('div.note')[0].innerText).toEqual('My new amazing test note');
+      });
 
-        expect(document.querySelector('div.note').innerText).toBe("cleaning");  
-    });
+
         
 });

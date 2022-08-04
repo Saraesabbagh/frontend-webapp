@@ -9,7 +9,7 @@
     "notesModel.js"(exports, module) {
       var NotesModel2 = class {
         constructor() {
-          this.notes = ["cleaning"];
+          this.notes = [];
         }
         getNotes() {
           return this.notes;
@@ -32,6 +32,14 @@
         constructor(model2) {
           this.model = model2;
           this.mainContainerEl = document.querySelector("#main-containter");
+          document.querySelector("#add-note-button").addEventListener("click", () => {
+            const newNote = document.querySelector("#note-input").value;
+            this.addNewNote(newNote);
+          });
+        }
+        addNewNote(newNote) {
+          this.model.addNotes(newNote);
+          this.displayNotes();
         }
         displayNotes() {
           const notes = this.model.getNotes();

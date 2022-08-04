@@ -1,6 +1,6 @@
 class NotesModel {
     constructor() {
-        this.notes = ["cleaning"];
+        this.notes = [];
     }
 
     getNotes() {
