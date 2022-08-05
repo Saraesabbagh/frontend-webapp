@@ -1,10 +1,15 @@
 /**
  * @jest-environment jsdom
  */
+const Api = require('./NotesApi')
 const fs = require('fs');
 const NotesModel = require('./notesModel');
 const NotesView = require('./notesView');
 
+require('jest-fetch-mock').enableMocks();
+
+
+jest.mock('./notesApi');
 
 describe('notesView', () => {
 
@@ -43,6 +48,23 @@ describe('notesView', () => {
       
         expect(document.querySelectorAll('div.note').length).toEqual(2);
       });
+
+
+    it("displays note from the API", () => {
+      document.body.innerHTML = fs.readFileSync('./index.html');
+
+      const api_double = new Api()
+      api_double.loadNotes.mockImplementation((callback) => { callback(["test"]) })
+
+      const model = new NotesModel();
+      const view = new NotesView(model, api_double);
+      view.displayNotesFromApi()
+
+      const div = document.querySelectorAll('div.note');
+      expect(div[0].innerText).toEqual("test");
+
+  })
+
 
         
 });

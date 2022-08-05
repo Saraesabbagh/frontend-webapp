@@ -29,18 +29,26 @@
   var require_notesView = __commonJS({
     "notesView.js"(exports, module) {
       var NotesView2 = class {
-        constructor(model2) {
+        constructor(model2, api2) {
           this.model = model2;
+          this.api = api2;
           this.mainContainerEl = document.querySelector("#main-containter");
-          document.querySelector("#add-note-button").addEventListener("click", () => {
-            const newNote = document.querySelector("#note-input").value;
-            this.addNewNote(newNote);
+          this.buttonEl = document.querySelector("#add-note-button");
+          this.buttonEl.addEventListener("click", () => {
+            const newNote = document.querySelector("#note-input");
+            this.addNewNote(newNote.value);
+            newNote.value = "";
           });
         }
         addNewNote(newNote) {
           this.model.addNotes(newNote);
-          document.querySelector("#note-input").value = "";
           this.displayNotes();
+        }
+        displayNotesFromApi() {
+          this.api.loadNotes((data) => {
+            data.forEach((note) => this.model.addNotes(note));
+            this.displayNotes();
+          });
         }
         displayNotes() {
           document.querySelectorAll(".note").forEach((element) => {
@@ -60,13 +68,27 @@
     }
   });
 
+  // NotesApi.js
+  var require_NotesApi = __commonJS({
+    "NotesApi.js"(exports, module) {
+      var NotesApi = class {
+        loadNotes(callback) {
+          fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => {
+            callback(data);
+          });
+        }
+      };
+      module.exports = NotesApi;
+    }
+  });
+
   // index.js
   var NotesModel = require_notesModel();
   var NotesView = require_notesView();
+  var Api = require_NotesApi();
   var model = new NotesModel();
-  model.addNotes("This is an example note");
-  model.addNotes("This is another note see!");
-  var notesView = new NotesView(model);
-  notesView.displayNotes();
+  var api = new Api();
+  var notesView = new NotesView(model, api);
+  notesView.displayNotesFromApi();
   console.log("The notes app is running");
 })();
