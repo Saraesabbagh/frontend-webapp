@@ -33,12 +33,17 @@
           this.model = model2;
           this.api = api2;
           this.mainContainerEl = document.querySelector("#main-containter");
+          this.inputEl = document.querySelector("#note-input");
           this.buttonEl = document.querySelector("#add-note-button");
           this.buttonEl.addEventListener("click", () => {
             const newNote = document.querySelector("#note-input");
             this.addNewNote(newNote.value);
             newNote.value = "";
           });
+        }
+        addToNotes() {
+          const noteInput = this.inputEl.value;
+          const notes = await;
         }
         addNewNote(newNote) {
           this.model.addNotes(newNote);
@@ -75,6 +80,22 @@
         loadNotes(callback) {
           fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => {
             callback(data);
+          });
+        }
+        async createNote(data) {
+          let notes = null;
+          fetch("http://localhost:3000/notes", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              "content": data
+            })
+          }).then((response) => response.json()).then((list) => {
+            return list;
+          }).catch((error) => {
+            console.error("Error:", error);
           });
         }
       };

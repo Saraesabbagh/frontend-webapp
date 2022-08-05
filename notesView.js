@@ -3,7 +3,7 @@ class NotesView {
         this.model = model;
         this.api = api;
         this.mainContainerEl = document.querySelector('#main-containter');
-        
+        this.inputEl = document.querySelector('#note-input');
 
         this.buttonEl = document.querySelector('#add-note-button'); 
         
@@ -16,11 +16,25 @@ class NotesView {
 
     }
 
-    addNewNote(newNote) {
-        this.model.addNotes(newNote);
+    addToNotes(){
+        const noteInput = this.inputEl.value;
+        const notes = await this.api.createNote(noteInput);
+        console.log(`saved notes ${notes}`);
+        notes.forEach((note) => {
+            const noteEl = document.createElement('div');
+            noteEl.innterText = note;
+            noteEl.className = 'note';
+            this.mainContainerEl.append(noteEl);
+            console.log(`adding ${note}`);
+        })
+        this.inputEl.value = '';
+    }
+
+    // addNewNote(newNote) {
+    //     this.model.addNotes(newNote);
         
-        this.displayNotes();
-      }
+    //     this.displayNotes();
+    //   }
 
       displayNotesFromApi() {
         this.api.loadNotes((data) =>{
